@@ -1,0 +1,96 @@
+\documentclass[12pt]{article}
+
+% Conform to NSF formatting requirements
+% see: https://www.nsf.gov/pubs/2020/nsf20587/nsf20587.pdf
+% --------------------------------------
+% 1in margins
+\usepackage[left=2.5cm, right=2.25cm, top=2.5cm, bottom=2.5cm]{geometry}
+% use times new roman for main text
+\usepackage{fontspec}
+\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{newtxmath}
+\usepackage{amssymb}
+\usepackage[table]{xcolor}
+\usepackage{array}
+\usepackage[]{hyperref}
+\usepackage{setspace}
+\singlespacing
+\linespread{1.25}
+
+% To fit more into the proposal,
+% let's make the section titles tiny and compact
+\usepackage[tiny, compact]{titlesec}
+\titleformat{\section}[runin]{\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}[runin]{\bfseries}{\thesubsection}{1em}{}
+
+% and let's compress the references too
+
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{apacite}
+
+\setmainfont{Times New Roman}
+% use cambria for math
+\usepackage{unicode-math}
+\setmathfont{Cambria Math.ttf}
+
+\newcommand{\note}[1]{\textsf{\textcolor{red}{#1}}}
+\newcommand{\comment}[1]{}
+
+\begin{document}
+
+\begin{titlepage}
+\title{\bf COMPARATIVE ANALYSIS OF THE INFRARED PROPERTIES OF H-II REGION NGC 2359 USING INFRARED SATELLITE DATA}
+\author{
+{\includegraphics[width=1.72in, height=2in]{Figures/logo.png}}
+\\
+\textbf{PROPOSAL SUBMITTED TO THE}\\		
+\textbf{DEPARTMENT OF PHYSICS}\\
+\textbf{TRI-CHANDRA MULTIPLE CAMPUS}\\
+\textbf{INSTITUTE OF SCIENCE AND TECHNOLOGY}\\
+\textbf{TRIBHUVAN UNIVERSITY, NEPAL}\\\\
+\textbf{FOR THE PROJECT WORK OF}\\
+\textbf{BACHELOR OF SCIENCE (B.Sc.) IN PHYSICS}\\
+BY\\
+\textbf{SAROJ OLI} \\
+\textbf{ROLL No.: 2130}\\
+\textbf{T.U. REGISTRATION No.: 5-2-37-1079-2019}}\\
+{\date{\textbf{DECEMBER 31, 2023}}}
+\setlength{\textheight}{23.5cm}
+\maketitle
+\thispagestyle{empty}
+\setlength{\textheight}{23cm}
+\end{titlepage}
+
+\clearpage
+\pagenumbering{roman}
+
+\input{disclaimer}
+\newpage
+\tableofcontents
+\newpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\section{PROJECT IDENTIFICATION}
+\input{project}
+\section{TECHNICAL INFORMATION}
+\input{technical}
+
+\bibliographystyle{apacite}
+\bibliography{references}
+
+\begin{appendix}
+\input{appendix}
+\end{appendix}
+
+\section{Supervisor Approval}
+\input{signature}
+
+\end{document}
