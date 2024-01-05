@@ -2,6 +2,8 @@ import pygame
 import random
 from constants import *
 
+FPS = 10
+
 def handle_events():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -59,7 +61,7 @@ def update_game_logic(left_lane_cars, right_lane_cars, top_lane_cars, bottom_lan
 
     return left_lane_counter, top_lane_counter, right_lane_counter, bottom_lane_counter
 
-def draw_on_screen(left_lane_cars, right_lane_cars, top_lane_cars, bottom_lane_cars, left_lane_counter, top_lane_counter, right_lane_counter, bottom_lane_counter):
+def draw_on_screen(left_lane_cars, right_lane_cars, top_lane_cars, bottom_lane_cars, left_lane_counter, top_lane_counter, right_lane_counter, bottom_lane_counter, traffic_light_timer):
     screen.fill(BROWN)
 
     # Draw roads
@@ -76,11 +78,17 @@ def draw_on_screen(left_lane_cars, right_lane_cars, top_lane_cars, bottom_lane_c
     pygame.draw.rect(screen, GRAY, (0, HEIGHT // 2 - ROAD_WIDTH // 2, ROAD_WIDTH, ROAD_WIDTH))  # Left
     pygame.draw.rect(screen, GRAY, (WIDTH - ROAD_WIDTH, HEIGHT // 2 - ROAD_WIDTH // 2, ROAD_WIDTH, ROAD_WIDTH))  # Right
 
-    # Draw red lines before every intersection
-    pygame.draw.line(screen, RED, (WIDTH // 2 - ROAD_WIDTH // 2 - 10, 250), (WIDTH // 2 - ROAD_WIDTH // 2 - 10, HEIGHT - 250), 5)  # Left intersection line
-    pygame.draw.line(screen, RED, (WIDTH // 2 + ROAD_WIDTH // 2 + 10, 250), (WIDTH // 2 + ROAD_WIDTH // 2 + 10, HEIGHT - 250), 5)  # Right intersection line
-    pygame.draw.line(screen, RED, (350, HEIGHT // 2 - ROAD_WIDTH // 2 - 10), (450, HEIGHT // 2 - ROAD_WIDTH // 2 - 10), 5)  # Top intersection line
-    pygame.draw.line(screen, RED, (350, HEIGHT // 2 + ROAD_WIDTH // 2 + 10), (450, HEIGHT // 2 + ROAD_WIDTH // 2 + 10), 5)  # Bottom intersection line
+    # Draw lines before every intersection with traffic light logic
+    if 0 <= traffic_light_timer < 10 * FPS:
+        pygame.draw.line(screen, GREEN, (WIDTH // 2 - ROAD_WIDTH // 2 - 10, 250), (WIDTH // 2 - ROAD_WIDTH // 2 - 10, HEIGHT - 250), 5)  # Left intersection line
+        pygame.draw.line(screen, GREEN, (WIDTH // 2 + ROAD_WIDTH // 2 + 10, 250), (WIDTH // 2 + ROAD_WIDTH // 2 + 10, HEIGHT - 250), 5)  # Right intersection line
+        pygame.draw.line(screen, RED, (350, HEIGHT // 2 - ROAD_WIDTH // 2 - 10), (450, HEIGHT // 2 - ROAD_WIDTH // 2 - 10), 5)  # Top intersection line
+        pygame.draw.line(screen, RED, (350, HEIGHT // 2 + ROAD_WIDTH // 2 + 10), (450, HEIGHT // 2 + ROAD_WIDTH // 2 + 10), 5)  # Bottom intersection line
+    elif 10 * FPS <= traffic_light_timer < 20 * FPS:
+        pygame.draw.line(screen, RED, (WIDTH // 2 - ROAD_WIDTH // 2 - 10, 250), (WIDTH // 2 - ROAD_WIDTH // 2 - 10, HEIGHT - 250), 5)  # Left intersection line
+        pygame.draw.line(screen, RED, (WIDTH // 2 + ROAD_WIDTH // 2 + 10, 250), (WIDTH // 2 + ROAD_WIDTH // 2 + 10, HEIGHT - 250), 5)  # Right intersection line
+        pygame.draw.line(screen, GREEN, (350, HEIGHT // 2 - ROAD_WIDTH // 2 - 10), (450, HEIGHT // 2 - ROAD_WIDTH // 2 - 10), 5)  # Top intersection line
+        pygame.draw.line(screen, GREEN, (350, HEIGHT // 2 + ROAD_WIDTH // 2 + 10), (450, HEIGHT // 2 + ROAD_WIDTH // 2 + 10), 5)  # Bottom intersection line
 
     # Draw left lane cars
     for car in left_lane_cars:
@@ -116,3 +124,44 @@ def draw_on_screen(left_lane_cars, right_lane_cars, top_lane_cars, bottom_lane_c
     screen.blit(text, (WIDTH - 480, 560))
 
     pygame.display.flip()  # Update the display
+
+# Main game loop
+pygame.init()
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Traffic Simulator")
+
+clock = pygame.time.Clock()
+
+left_lane_cars = []
+right_lane_cars = []
+top_lane_cars = []
+bottom_lane_cars = []
+
+left_lane_counter = 0
+top_lane_counter = 0
+right_lane_counter = 0
+bottom_lane_counter = 0
+
+traffic_light_timer = 0
+running = True
+
+while running:
+    clock.tick(FPS)
+
+    running = handle_events()
+
+    # Update traffic light timer
+    traffic_light_timer = (traffic_light_timer + 1) % (FPS * 20)  # 20 seconds cycle (green: 10s, red: 10s)
+
+    # Update game logic based on traffic light timer
+    left_lane_counter, top_lane_counter, right_lane_counter, bottom_lane_counter = update_game_logic(
+        left_lane_cars, right_lane_cars, top_lane_cars, bottom_lane_cars,
+        left_lane_counter, top_lane_counter, right_lane_counter, bottom_lane_counter
+    )
+
+    # Draw the scene
+    draw_on_screen(left_lane_cars, right_lane_cars, top_lane_cars, bottom_lane_cars,
+                   left_lane_counter, top_lane_counter, right_lane_counter, bottom_lane_counter,
+                   traffic_light_timer)
+
+pygame.quit()

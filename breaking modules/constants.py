@@ -5,6 +5,7 @@ WHITE = (255, 255, 255)
 GRAY = (169, 169, 169)
 RED = (255, 0, 0)
 BROWN = (218, 160, 109)
+GREEN = (0,255,0)
 
 # Define road properties
 ROAD_WIDTH = 100
